@@ -10,9 +10,8 @@ public interface EmployeeService {
 	  Employee createEmployee(Employee e);      
 	  Employee findEmployeeById(String employeeId) throws ResourceNotFoundException;    
 	  void deleteEmployeeById(String employeeId) throws ResourceNotFoundException;      
-	  Employee updateEmployeeById(Employee e) throws ResourceNotFoundException;          
+	  Employee updateEmployeeById(Employee e) throws ResourceNotFoundException; 
 	  List<Employee> findAllEmployees();      
 	  void deleteAllEmployees(); 
-	  
-	  
+	    
 }

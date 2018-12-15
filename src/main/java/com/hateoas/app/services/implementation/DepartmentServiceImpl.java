@@ -3,15 +3,15 @@ package com.hateoas.app.services.implementation;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
+import com.hateoas.app.exceptions.ResourceNotFoundException;
 import com.hateoas.app.models.Department;
 import com.hateoas.app.repositories.DepartmentRepository;
 import com.hateoas.app.services.DepartementService;
 
 @Service
-public class DepartmentService implements DepartementService {
+public class DepartmentServiceImpl implements DepartementService {
 	
 	@Autowired     
 	private DepartmentRepository departmentRepository;  
@@ -22,17 +22,23 @@ public class DepartmentService implements DepartementService {
 	}
 
 	@Override
-	public Department findDepartmentById(String departmentId) {
-		return departmentRepository.findById(departmentId).orElse(null);
+	public Department findDepartmentById(String departmentId) throws ResourceNotFoundException {
+		return departmentRepository.findById(departmentId).orElseThrow(() -> new ResourceNotFoundException());
 	}
 
 	@Override
-	public void deleteDepartmentById(String departmentId) {
+	public void deleteDepartmentById(String departmentId) throws ResourceNotFoundException{
+		if (!departmentRepository.existsById(departmentId)){
+			throw new ResourceNotFoundException();
+		}
 		departmentRepository.deleteById(departmentId);
 	}
 
 	@Override
 	public Department updateDepartmentById(Department d) {
+		if (!departmentRepository.existsById(d.getDepartmentId())){
+			throw new ResourceNotFoundException();
+		}
 		return departmentRepository.save(d);
 	}
 

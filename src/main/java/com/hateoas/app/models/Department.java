@@ -22,7 +22,6 @@ public class Department{
     @NotBlank
     private String description;
     
-    @NotBlank
     @DBRef
     private List<Employee> employees;
 
