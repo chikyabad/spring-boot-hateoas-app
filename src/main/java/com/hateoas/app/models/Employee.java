@@ -2,14 +2,11 @@ package com.hateoas.app.models;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 
 @Document(collection="employees")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Employee{
 	
     @Id
@@ -25,7 +22,6 @@ public class Employee{
     private int age;
 
     public Employee() {
-    	super();
     }
 
     public Employee(String firstName, String lastName, int age) {
