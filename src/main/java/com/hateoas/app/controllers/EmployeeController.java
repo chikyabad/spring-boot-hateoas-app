@@ -5,6 +5,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,14 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hateoas.app.exceptions.ResourceNotFoundException;
 import com.hateoas.app.models.Employee;
 import com.hateoas.app.services.EmployeeService;
 
 @RestController
 @RequestMapping("/api")
 public class EmployeeController {
-
+	
 	@Autowired
 	private EmployeeService employeeService;
 
@@ -32,12 +32,8 @@ public class EmployeeController {
 	}
 
 	@GetMapping(value = "/employees/{id}")
-	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") String id) {
-		try {
-			return ResponseEntity.ok().body(employeeService.findEmployeeById(id));
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+	public HttpEntity<Employee> getEmployeeById(@PathVariable("id") String id) {
+		return ResponseEntity.ok().body(employeeService.findEmployeeById(id));
 	}
 
 	@PostMapping("/employees")
@@ -46,22 +42,15 @@ public class EmployeeController {
 	}
     
 	@PutMapping(value="/employees/{id}")
-	public ResponseEntity<Employee> updateEmployeeById(@Valid @RequestBody Employee employee) {
-		try {
-			return ResponseEntity.ok().body(employeeService.updateEmployeeById(employee));
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<Employee> updateEmployeeById(@PathVariable("id") String id, @Valid @RequestBody Employee employee) {
+		employee.setEmployeeId(id);
+		return ResponseEntity.ok().body(employeeService.updateEmployeeById(employee));
 	}
 	
 	@DeleteMapping(value = "/employees/{id}")
 	public ResponseEntity<Employee> deleteEmployeeById(@PathVariable("id") String id) {
-		try {
-			employeeService.deleteEmployeeById(id);
-			return ResponseEntity.noContent().build();
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		employeeService.deleteEmployeeById(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }

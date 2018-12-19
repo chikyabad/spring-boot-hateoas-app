@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.hateoas.app.exceptions.ResourceNotFoundException;
 import com.hateoas.app.models.Department;
 import com.hateoas.app.repositories.DepartmentRepository;
@@ -22,14 +21,14 @@ public class DepartmentServiceImpl implements DepartementService {
 	}
 
 	@Override
-	public Department findDepartmentById(String departmentId) throws ResourceNotFoundException {
-		return departmentRepository.findById(departmentId).orElseThrow(() -> new ResourceNotFoundException());
+	public Department findDepartmentById(String departmentId){
+		return departmentRepository.findById(departmentId).orElseThrow(() -> new ResourceNotFoundException("Department with id "+departmentId+" not found"));
 	}
 
 	@Override
-	public void deleteDepartmentById(String departmentId) throws ResourceNotFoundException{
+	public void deleteDepartmentById(String departmentId){
 		if (!departmentRepository.existsById(departmentId)){
-			throw new ResourceNotFoundException();
+			throw new ResourceNotFoundException("Department with id "+departmentId+" not found");
 		}
 		departmentRepository.deleteById(departmentId);
 	}
@@ -37,7 +36,7 @@ public class DepartmentServiceImpl implements DepartementService {
 	@Override
 	public Department updateDepartmentById(Department d) {
 		if (!departmentRepository.existsById(d.getDepartmentId())){
-			throw new ResourceNotFoundException();
+			throw new ResourceNotFoundException("Department with id "+d.getDepartmentId()+" not found");
 		}
 		return departmentRepository.save(d);
 	}

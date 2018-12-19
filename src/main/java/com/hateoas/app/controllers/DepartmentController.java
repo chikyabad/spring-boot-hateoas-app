@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.hateoas.app.exceptions.ResourceNotFoundException;
 import com.hateoas.app.models.Department;
 import com.hateoas.app.models.Employee;
 import com.hateoas.app.services.DepartementService;
@@ -34,11 +33,7 @@ public class DepartmentController {
 	
 	@GetMapping(value = "/departments/{id}")
 	public ResponseEntity<Department> getDepartmentById(@PathVariable("id") String id) {
-		try {
-			return ResponseEntity.ok().body(departmentService.findDepartmentById(id));
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		return ResponseEntity.ok().body(departmentService.findDepartmentById(id));
 	}
 	
 	@PostMapping("/departments")
@@ -48,22 +43,13 @@ public class DepartmentController {
 	
 	@PutMapping(value="/departments/{id}")
 	public ResponseEntity<Department> updateEmployeeById(@PathVariable("id") String id, @Valid @RequestBody Department department) {
-		try {
-			department.setDepartmentId(id);
-			return ResponseEntity.ok().body(departmentService.updateDepartmentById(department));
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		department.setDepartmentId(id);
+		return ResponseEntity.ok().body(departmentService.updateDepartmentById(department));
 	}
 	
 	@DeleteMapping(value = "/departments/{id}")
 	public ResponseEntity<Employee> deleteEmployeeById(@PathVariable("id") String id) {
-		try {
-			departmentService.deleteDepartmentById(id);
-			return ResponseEntity.noContent().build();
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
+		return ResponseEntity.noContent().build();
 	}
 
 }

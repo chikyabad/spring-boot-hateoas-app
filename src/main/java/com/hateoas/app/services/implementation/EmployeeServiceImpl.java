@@ -22,14 +22,14 @@ public class EmployeeServiceImpl implements EmployeeService{
   }  
   
   @Override     
-  public Employee findEmployeeById(String employeeId) throws ResourceNotFoundException  {     
-    return employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException());
+  public Employee findEmployeeById(String employeeId) {     
+    return employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee with id "+ employeeId+" not found"));
   } 
   
   @Override     
   public void deleteEmployeeById(String employeeId) {  
 	if (!employeeRepository.existsById(employeeId)){
-		throw new ResourceNotFoundException();
+		throw new ResourceNotFoundException("Employee with id "+ employeeId+" not found");
 	}
 	employeeRepository.deleteById(employeeId);
   }    
@@ -37,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService{
   @Override     
   public Employee updateEmployeeById(Employee e) {    
 	if (!employeeRepository.existsById(e.getEmployeeId())){
-		throw new ResourceNotFoundException();
+		throw new ResourceNotFoundException("Employee with "+ e.getEmployeeId()+" not found");
 	}
     return employeeRepository.save(e);   
   }   
